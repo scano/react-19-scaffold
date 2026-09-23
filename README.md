@@ -1,6 +1,6 @@
 # El estante — laboratorio de React
 
-Proyecto pequeño y didáctico para aprender el modelo mental de React con una colección de libros. Usa React, Vite, JavaScript con módulos ESM y CSS sin frameworks.
+Proyecto pequeño y didáctico para aprender el modelo mental de React con una colección de libros. Usa React, Vite, React Router, JavaScript con módulos ESM y CSS sin frameworks. El catálogo consume datos de JSONPlaceholder y utiliza datos locales como respaldo.
 
 ## Puesta en marcha
 
@@ -22,16 +22,24 @@ pnpm preview
 
 ```text
 src/
-├── api/booksApi.js           # Petición fetch reutilizable
+├── api/booksApi.js           # Fetch y adaptación de los datos remotos
 ├── components/
 │   ├── Header.jsx            # Props sencillas
+│   ├── Footer.jsx            # Pie global de la aplicación
 │   ├── Search.jsx            # Evento onChange e input controlado
 │   ├── BookList.jsx          # Lista, map, key y renderizado condicional
 │   └── BookCard.jsx          # Componente de presentación y props
 ├── data/books.js             # Datos mock separados de la interfaz
-├── examples/AppWithApi.jsx   # Carga REST, estados y useEffect
-├── hooks/useBookSearch.js    # Custom hook con useState y filtrado
-├── App.jsx                   # Composición y flujo de datos
+├── hooks/
+│   ├── useBooks.js           # Carga remota, estados y reintento
+│   └── useBookSearch.js      # Estado y filtrado de la búsqueda
+├── pages/
+│   ├── HomePage.jsx          # Página de inicio
+│   ├── LibraryPage.jsx       # Catálogo, búsqueda y estados de red
+│   ├── BookDetailPage.jsx    # Detalle de una ruta dinámica
+│   ├── AboutPage.jsx         # Información del proyecto
+│   └── NotFoundPage.jsx      # Página para rutas desconocidas
+├── App.jsx                   # Layout, rutas y estado compartido
 ├── main.jsx                  # Entrada de React y StrictMode
 └── styles.css                # Estilos globales y responsive
 ```
@@ -39,46 +47,23 @@ src/
 ## Qué practicar en cada archivo
 
 - **`src/main.jsx`**: cómo React se conecta al elemento `#root`; qué hace `StrictMode` durante el desarrollo.
-- **`src/App.jsx`**: composición de componentes, estado con `useState` y datos que bajan mediante props.
+- **`src/App.jsx`**: layout global, definición de rutas y distribución del estado compartido.
+- **`src/pages/`**: vistas completas asociadas a cada ruta de la aplicación.
 - **`src/components/Header.jsx`**: recibir y mostrar una prop (`bookCount`).
 - **`src/components/Search.jsx`**: input controlado, evento `onChange`, callback recibido por props y renderizado condicional del botón.
 - **`src/components/BookList.jsx`**: transformar datos con `map`, usar una `key` estable y mostrar un estado vacío.
 - **`src/components/BookCard.jsx`**: desestructurar props y convertir un objeto de datos en interfaz.
+- **`src/hooks/useBooks.js`**: encapsular el ciclo de vida de una petición, sus estados, cancelación, respaldo y reintento.
 - **`src/hooks/useBookSearch.js`**: extraer estado y lógica reutilizable a un custom hook. Cambia el filtro para incluir también `genre`.
 - **`src/data/books.js`**: separar datos mock de componentes. Añade un libro y comprueba que la UI se actualiza sin tocar JSX.
-- **`src/api/booksApi.js`**: encapsular `fetch`, comprobar `response.ok` y devolver JSON.
-- **`src/examples/AppWithApi.jsx`**: estados `loading`, `success` y `error`; efecto para sincronizar con una API y cleanup con `AbortController`.
+- **`src/api/booksApi.js`**: encapsular `fetch`, comprobar `response.ok` y adaptar una respuesta externa al modelo de la aplicación.
 - **`src/styles.css`**: clases CSS, variables, grid, responsive y estados de interacción sin framework.
 
-## Del mock a `GET /v1/books`
+## API de prueba
 
-La aplicación inicial importa `initialBooks` para que funcione sin servidor. Cuando exista un endpoint `GET /v1/books`, abre `src/main.jsx` y sustituye:
+Al iniciarse, la aplicación solicita seis publicaciones a `https://jsonplaceholder.typicode.com/posts?_limit=6`. `src/api/booksApi.js` transforma la respuesta al modelo que esperan las tarjetas. La petición se puede cancelar con `AbortController` y la interfaz contempla carga, error y reintento.
 
-```jsx
-import App from './App.jsx'
-```
-
-por:
-
-```jsx
-import App from './examples/AppWithApi.jsx'
-```
-
-La respuesta del endpoint debe ser un array con objetos como este:
-
-```json
-{
-  "id": "book-001",
-  "title": "La mano izquierda de la oscuridad",
-  "author": "Ursula K. Le Guin",
-  "genre": "Ciencia ficción",
-  "year": 1969,
-  "tone": "ink",
-  "description": "Un viaje a un planeta helado..."
-}
-```
-
-El ejemplo REST está separado a propósito: primero aprende props, estado, eventos y listas; después compáralo con la versión que sincroniza datos externos mediante un efecto.
+Si el servicio no está disponible, se muestra un aviso y el catálogo continúa funcionando con `src/data/books.js` como respaldo local.
 
 ## Retos siguientes
 

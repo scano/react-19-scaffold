@@ -1,8 +1,16 @@
 import { Link, useParams } from 'react-router-dom'
 
-function BookDetail({ books }) {
+function BookDetailPage({ books, status }) {
   const { bookId } = useParams()
   const book = books.find((item) => item.id === bookId)
+
+  if (status === 'loading') {
+    return (
+      <main>
+        <p className="status-message" role="status">Cargando detalle…</p>
+      </main>
+    )
+  }
 
   if (!book) {
     return (
@@ -56,4 +64,4 @@ function BookDetail({ books }) {
   )
 }
 
-export default BookDetail
+export default BookDetailPage
