@@ -5,7 +5,10 @@ import HomePage          from './pages/HomePage.jsx'
 import LibraryPage       from './pages/LibraryPage.jsx'
 import BookDetailPage    from './pages/BookDetailPage.jsx'
 import AboutPage         from './pages/AboutPage.jsx'
+import LoginPage         from './pages/LoginPage.jsx'
+import ProfilePage       from './pages/ProfilePage.jsx'
 import NotFoundPage      from './pages/NotFoundPage.jsx'
+import ProtectedRoute    from './components/ProtectedRoute.jsx'
 import { useBooks }      from './hooks/useBooks.js'
 import { useBookSearch } from './hooks/useBookSearch.js'
 
@@ -37,6 +40,15 @@ function App() {
 					element={<BookDetailPage books={books} status={status}/>}
 				/>
 				<Route path="/acerca" element={<AboutPage/>}/>
+				<Route path="/login" element={<LoginPage/>}/>
+				<Route
+					path="/perfil"
+					element={
+						<ProtectedRoute>
+							<ProfilePage/>
+						</ProtectedRoute>
+					}
+				/>
 				<Route path="*" element={<NotFoundPage/>}/>
 			</Routes>
 			

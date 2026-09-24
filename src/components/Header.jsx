@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../auth/AuthContext.jsx'
 
 function Header({ bookCount }) {
+  const { user } = useAuth()
   const menuItems = [
     { to: '/', label: 'Inicio', end: true },
     { to: '/biblioteca', label: 'Biblioteca' },
@@ -27,9 +29,15 @@ function Header({ bookCount }) {
         ))}
       </nav>
 
-      <p className="collection-count">
-        Colección <strong>{bookCount.toString().padStart(2, '0')}</strong>
-      </p>
+      <div className="header-meta">
+        <p className="collection-count">
+          Colección <strong>{bookCount.toString().padStart(2, '0')}</strong>
+        </p>
+        <NavLink className="account-link" to={user ? '/perfil' : '/login'}>
+          <span className="account-mark" aria-hidden="true">{user ? user.name.charAt(0) : '↗'}</span>
+          <span>{user ? 'Perfil' : 'Acceder'}</span>
+        </NavLink>
+      </div>
     </header>
   )
 }

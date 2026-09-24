@@ -23,9 +23,11 @@ pnpm preview
 ```text
 src/
 ├── api/booksApi.js           # Fetch y adaptación de los datos remotos
+├── auth/AuthContext.jsx      # Sesión simulada y persistencia local
 ├── components/
 │   ├── Header.jsx            # Props sencillas
 │   ├── Footer.jsx            # Pie global de la aplicación
+│   ├── ProtectedRoute.jsx    # Protección de rutas privadas
 │   ├── Search.jsx            # Evento onChange e input controlado
 │   ├── BookList.jsx          # Lista, map, key y renderizado condicional
 │   └── BookCard.jsx          # Componente de presentación y props
@@ -38,6 +40,8 @@ src/
 │   ├── LibraryPage.jsx       # Catálogo, búsqueda y estados de red
 │   ├── BookDetailPage.jsx    # Detalle de una ruta dinámica
 │   ├── AboutPage.jsx         # Información del proyecto
+│   ├── LoginPage.jsx         # Formulario de acceso simulado
+│   ├── ProfilePage.jsx       # Perfil privado del usuario
 │   └── NotFoundPage.jsx      # Página para rutas desconocidas
 ├── App.jsx                   # Layout, rutas y estado compartido
 ├── main.jsx                  # Entrada de React y StrictMode
@@ -49,6 +53,7 @@ src/
 - **`src/main.jsx`**: cómo React se conecta al elemento `#root`; qué hace `StrictMode` durante el desarrollo.
 - **`src/App.jsx`**: layout global, definición de rutas y distribución del estado compartido.
 - **`src/pages/`**: vistas completas asociadas a cada ruta de la aplicación.
+- **`src/auth/AuthContext.jsx`**: sesión compartida, validación de las credenciales demo y persistencia del ID de usuario.
 - **`src/components/Header.jsx`**: recibir y mostrar una prop (`bookCount`).
 - **`src/components/Search.jsx`**: input controlado, evento `onChange`, callback recibido por props y renderizado condicional del botón.
 - **`src/components/BookList.jsx`**: transformar datos con `map`, usar una `key` estable y mostrar un estado vacío.
@@ -64,6 +69,10 @@ src/
 Al iniciarse, la aplicación solicita seis publicaciones a `https://jsonplaceholder.typicode.com/posts?_limit=6`. `src/api/booksApi.js` transforma la respuesta al modelo que esperan las tarjetas. La petición se puede cancelar con `AbortController` y la interfaz contempla carga, error y reintento.
 
 Si el servicio no está disponible, se muestra un aviso y el catálogo continúa funcionando con `src/data/books.js` como respaldo local.
+
+## Acceso de demostración
+
+La ruta `/login` acepta el usuario `demo` y la contraseña `demo`. Tras acceder, `/perfil` muestra el usuario autenticado y su ID estable (`user-demo-001`). La sesión se guarda en `localStorage`, sin almacenar la contraseña, para conservarla al recargar la página.
 
 ## Retos siguientes
 
