@@ -1,7 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext.jsx'
+import type { PropsWithChildren } from 'react'
+import { useAuth } from '../auth/AuthContext'
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children }: PropsWithChildren) {
   const { user } = useAuth()
   const location = useLocation()
 

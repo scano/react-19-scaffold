@@ -1,13 +1,24 @@
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext.jsx'
+import { useAuth } from '../auth/AuthContext'
 
-function Header({ bookCount }) {
+interface HeaderProps {
+  bookCount: number
+}
+
+interface MenuItem {
+  to: string
+  label: string
+  end?: boolean
+}
+
+const menuItems: MenuItem[] = [
+  { to: '/', label: 'Inicio', end: true },
+  { to: '/biblioteca', label: 'Biblioteca' },
+  { to: '/acerca', label: 'Acerca de' },
+]
+
+function Header({ bookCount }: HeaderProps) {
   const { user } = useAuth()
-  const menuItems = [
-    { to: '/', label: 'Inicio', end: true },
-    { to: '/biblioteca', label: 'Biblioteca' },
-    { to: '/acerca', label: 'Acerca de' },
-  ]
 
   return (
     <header className="site-header">

@@ -1,7 +1,13 @@
 import { Link, useParams } from 'react-router-dom'
+import type { Book, LoadStatus } from '../types/book'
 
-function BookDetailPage({ books, status }) {
-  const { bookId } = useParams()
+interface BookDetailPageProps {
+  books: Book[]
+  status: LoadStatus
+}
+
+function BookDetailPage({ books, status }: BookDetailPageProps) {
+  const { bookId } = useParams<{ bookId: string }>()
   const book = books.find((item) => item.id === bookId)
 
   if (status === 'loading') {

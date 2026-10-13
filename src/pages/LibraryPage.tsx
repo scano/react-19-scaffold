@@ -1,7 +1,17 @@
-import Search from '../components/Search.jsx'
-import BookList from '../components/BookList.jsx'
+import Search from '../components/Search'
+import BookList from '../components/BookList'
+import type { Book, LoadStatus } from '../types/book'
 
-function LibraryPage({ query, setQuery, books, status, error, onRetry }) {
+interface LibraryPageProps {
+  query: string
+  setQuery: (query: string) => void
+  books: Book[]
+  status: LoadStatus
+  error: string
+  onRetry: () => void
+}
+
+function LibraryPage({ query, setQuery, books, status, error, onRetry }: LibraryPageProps) {
   return (
     <main>
       <section className="page-heading" aria-labelledby="library-title">

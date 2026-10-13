@@ -1,6 +1,10 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext.jsx'
+import { useAuth } from '../auth/AuthContext'
+
+interface LoginLocationState {
+  from?: { pathname?: string }
+}
 
 function LoginPage() {
   const { user, login } = useAuth()
@@ -14,7 +18,7 @@ function LoginPage() {
     return <Navigate to="/perfil" replace />
   }
 
-  function handleSubmit(event) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const result = login(username.trim(), password)
 
@@ -23,7 +27,8 @@ function LoginPage() {
       return
     }
 
-    const destination = location.state?.from?.pathname || '/perfil'
+    const state = location.state as LoginLocationState | null
+    const destination = state?.from?.pathname || '/perfil'
     navigate(destination, { replace: true })
   }
 

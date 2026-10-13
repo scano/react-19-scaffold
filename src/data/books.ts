@@ -1,4 +1,6 @@
-export const initialBooks = [
+import type { Book } from '../types/book'
+
+export const initialBooks: Book[] = [
   {
     id: 'book-001',
     title: 'La mano izquierda de la oscuridad',

@@ -1,6 +1,11 @@
-import BookCard from './BookCard.jsx'
+import BookCard from './BookCard'
+import type { Book } from '../types/book'
 
-function BookList({ books }) {
+interface BookListProps {
+  books: Book[]
+}
+
+function BookList({ books }: BookListProps) {
   if (books.length === 0) {
     return (
       <div className="empty-state">

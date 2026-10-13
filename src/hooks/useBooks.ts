@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { fetchBooks } from '../api/booksApi.js'
-import { initialBooks } from '../data/books.js'
+import { fetchBooks } from '../api/booksApi'
+import { initialBooks } from '../data/books'
+import type { Book, LoadStatus } from '../types/book'
 
 export function useBooks() {
-  const [books, setBooks] = useState([])
-  const [status, setStatus] = useState('loading')
+  const [books, setBooks] = useState<Book[]>([])
+  const [status, setStatus] = useState<LoadStatus>('loading')
   const [error, setError] = useState('')
   const [reloadToken, setReloadToken] = useState(0)
 
@@ -19,17 +20,18 @@ export function useBooks() {
         const remoteBooks = await fetchBooks({ signal: controller.signal })
         setBooks(remoteBooks)
         setStatus('success')
-      } catch (requestError) {
-        if (requestError.name !== 'AbortError') {
-          setBooks(initialBooks)
-          setError(requestError.message)
-          setStatus('error')
+      } catch (requestError: unknown) {
+        if (requestError instanceof Error && requestError.name === 'AbortError') {
+          return
         }
+
+        setBooks(initialBooks)
+        setError(requestError instanceof Error ? requestError.message : 'Ha ocurrido un error inesperado.')
+        setStatus('error')
       }
     }
 
-    loadBooks()
-
+    void loadBooks()
     return () => controller.abort()
   }, [reloadToken])
 

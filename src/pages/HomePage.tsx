@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom'
 
-function HomePage({ bookCount }) {
+interface HomePageProps {
+  bookCount: number
+}
+
+function HomePage({ bookCount }: HomePageProps) {
   return (
     <main>
       <section className="intro home-intro" aria-labelledby="page-title">

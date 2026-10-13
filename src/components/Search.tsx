@@ -1,5 +1,13 @@
-function Search({ query, onQueryChange, resultCount }) {
-  function handleChange(event) {
+import type { ChangeEvent } from 'react'
+
+interface SearchProps {
+  query: string
+  onQueryChange: (query: string) => void
+  resultCount: number
+}
+
+function Search({ query, onQueryChange, resultCount }: SearchProps) {
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
     onQueryChange(event.target.value)
   }
 
